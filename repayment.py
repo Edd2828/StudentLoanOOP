@@ -1,20 +1,32 @@
 # Standard library imports
-from datetime import datetime, UTC
+from datetime import datetime
 
 # Local application or library-specific imports
 from loan import Loan
 
-
 class Repayment(Loan):
 
-    START_DATE = str(datetime.now(UTC).strftime("%Y-%m-%d"))
-    RATE = 0
+    def __init__(self, initial_amount):
+        super().__init__(initial_amount)
+        self._outstanding_amount = initial_amount
+        self._end_date = super().start_date
 
-    def __init__(self, end_date, initial_amount, start_date=START_DATE, rate=RATE):
-        self.end_date = end_date
-        super().__init__(initial_amount, start_date, rate)
+    @property
+    def end_date(self):
+        return self.end_date
+    
+    @end_date.setter
+    def end_date(self, value):
+        self._end_date = str(datetime.strptime(value, "%Y-%m-%d").strftime("%Y-%m-%d"))
 
+    def change_start_date(self, value):
+        self.start_date = value
 
-my_repayment = Repayment(100)
+    def change_rate(self, value):
+        self.rate = value
 
-print(my_repayment.__dict__)
+my_loan = Repayment(100)
+
+my_loan.end_date = "2024-04-12"
+
+print(my_loan.__dict__)
